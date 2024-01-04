@@ -98,8 +98,7 @@ app.post("/findPCC", (req, res) => {
       for (const successor of CitiesSuccessor) {
         const newPCC = PCC[currentCity.name] + successor.distance;
 
-        //comparer si la nouvelle distance est inférieure à la  distance du successeur,
-        //donc changer le PCC par newPCC
+        //comparer si la nouvelle distance est inférieure à la distance du successeur
         if (newPCC < PCC[successor.name]) {
           PCC[successor.name] = newPCC;
           predecessors[successor.name] = currentCity.name;
