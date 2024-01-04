@@ -61,6 +61,36 @@ app.post("/findPCC", (req, res) => {
       successor: [{ name: "C", distance: 4 }],
     },
   ];
+
+  const CalculatePCC = (start, end) => {
+    //Variable
+    let origin = start;
+    let PCC = [];
+
+    //array manipulation
+    const getCitiesName = cities.map((city) => city.name);
+    const getCitiesSuccessor = cities.find((city) => city.name === "E");
+    let sortedCities = getCitiesName.filter((cityName) => cityName !== origin);
+
+    let succesor = getCitiesSuccessor.successor || [];
+
+    if (sortedCities) {
+      PCC[origin] = 0;
+
+    //   if ()
+    }
+
+    // res.json({ citiesNameArray: getCitiesName });
+    // res.json({ origine : origin });
+    // res.json({ sortedCities: sortedCities });
+    res.json({ succesor: succesor });
+
+    // for (let i=0 ; i<=sortedCities.length ; i++){
+    //     if (.includes)
+    // }
+  };
+
+  CalculatePCC("A", "B");
 });
 
 module.exports = app;
