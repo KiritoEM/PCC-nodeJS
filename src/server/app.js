@@ -64,33 +64,69 @@ app.post("/findPCC", (req, res) => {
 
   const CalculatePCC = (start, end) => {
     //Variable
-    let origin = start;
-    let PCC = [];
+    let PCC = {};
+    const predecessors = {};
+    const visited = {};
+    const queue = [];
 
-    //array manipulation
-    const getCitiesName = cities.map((city) => city.name);
-    const getCitiesSuccessor = cities.find((city) => city.name === "E");
-    let sortedCities = getCitiesName.filter((cityName) => cityName !== origin);
-
-    let succesor = getCitiesSuccessor.successor || [];
-
-    if (sortedCities) {
-      PCC[origin] = 0;
-
-    //   if ()
+    //Initialisation par défaut les sommets par non visités
+    for (const city of cities) {
+      PCC[city.name] = Infinity;
+      predecessors[city.name] = null;
+      visited[city.name] = false;
     }
 
-    // res.json({ citiesNameArray: getCitiesName });
-    // res.json({ origine : origin });
-    // res.json({ sortedCities: sortedCities });
-    res.json({ succesor: succesor });
+    //initialiser le PCC du origin à 0
+    PCC[start] = 0;
 
-    // for (let i=0 ; i<=sortedCities.length ; i++){
-    //     if (.includes)
-    // }
+    // Ajout de la ville de départ dans la file d'attente queue
+    queue.push({ name: start, distance: 0 });
+
+    //Tant que la file d' attente est positive
+    while (queue.length > 0) {
+      //Récupérer la ville de distance minimale
+      const currentCity = queue.shift();
+
+      if (visited[currentCity.name]) continue;
+      visited[currentCity.name] = true;
+
+      //filtrer le cities par le currenCity.name
+      const CitiesSuccessor =
+        cities.find((city) => city.name === currentCity.name)?.successor || [];
+
+      // Mise à jour des distances des successeurs
+      for (const successor of CitiesSuccessor) {
+        const newPCC = PCC[currentCity.name] + successor.distance;
+
+        //comparer si la nouvelle distance est inférieure à la  distance du successeur,
+        //donc changer le PCC par newPCC
+        if (newPCC < PCC[successor.name]) {
+          PCC[successor.name] = newPCC;
+          predecessors[successor.name] = currentCity.name;
+          queue.push({ name: successor.name, distance: newPCC });
+        }
+      }
+    }
+
+    // Reconstruction du chemin
+    const PCCpath = [];
+    let currentCity = end;
+
+    //tant que currentCity est différent de null
+    while (currentCity !== null) {
+      //ajouter currentCity dans le path
+      PCCpath.unshift(currentCity);
+      //ville actuelle est le prédécesseur
+      currentCity = predecessors[currentCity];
+    }
+
+    // La distance minimale entre start et end
+    const minDistance = PCC[end];
+
+    res.json({ minDistance: minDistance, path: PCCpath });
   };
 
-  CalculatePCC("A", "B");
+  CalculatePCC("D", "F");
 });
 
 module.exports = app;
