@@ -1,18 +1,15 @@
-const  cities  = require("./../utils/cities_data.js");
-const citiesModel = require("./../models/cities.model.js");
+const cities = require("./../utils/cities_data.js");
+const { postCitiesHelper } = require("./../helper/postCities.js");
 
 const addCities = async (req, res) => {
   try {
-    for (const city of cities) {
-      const newCity = new citiesModel({
-        name: city.name,
-        successors: city.successor,
-      });
+    const response =  postCitiesHelper(cities);
 
-      await newCity.save();
+    if (response) {
+      return res.status(200).json("Villes ajoutées avec succès !");
+    } else {
+      return res.status(400).json("Erreur lors de l' ajout des Villes");
     }
-
-    return res.status(200).json("Villes ajoutées avec succès !");
   } catch (error) {
     console.error("Erreur lors de l'ajout des villes :", error);
   }

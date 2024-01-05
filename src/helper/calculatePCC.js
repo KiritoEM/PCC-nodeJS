@@ -1,6 +1,4 @@
-const cities = require("../utils/cities_data");
-
-const CalculatePCC = (start, end) => {
+const CalculatePCC = (start, end, cities) => {
   //Variable
   let PCC = {};
   const predecessors = {};

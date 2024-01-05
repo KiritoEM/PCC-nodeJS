@@ -21,9 +21,7 @@ app.get("/home", (req, res) => {
   res.status(200).json("Welcome, your app is working well");
 });
 
+//App routes
 app.use("/", require("./../routes/app.routes"));
-
-app.post("/findPCC", (req, res) => {
-});
 
 module.exports = app;
